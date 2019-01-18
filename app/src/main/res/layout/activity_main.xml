@@ -10,7 +10,8 @@
     <com.yuntu.randombubbleview.RandomBubbleLayout
         android:id="@+id/bubblelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="300dp"
+        android:background="@drawable/bg" />
 
     <Button
         android:id="@+id/add"

@@ -1,5 +1,6 @@
 package com.yuntu.randombubbleview;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,8 +15,6 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-
-    //FrameLayout mContent;
 
     RandomBubbleLayout bubbleLayout;
 
@@ -37,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //mContent = findViewById(R.id.mycontent1);
         bubbleLayout = findViewById(R.id.bubblelayout);
         bubbleLayout.createBubbleTrack(5);
 
@@ -47,70 +45,46 @@ public class MainActivity extends AppCompatActivity {
                 TextView mTextView = (TextView) LayoutInflater.from(getBaseContext()).inflate(R.layout.bubble_item, null);
                 int textIndex = random.nextInt(text.length);
                 mTextView.setText(text[textIndex]);
+                mTextView.setTextColor(Color.parseColor("#ffffff"));
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                //BubbleTrack track=bubbleLayout.getChildAt(random.nextInt(bubbleLayout.getChildCount()));
                 List<BallisticBlank> list = findBlank(mTextView.getText().toString());
                 if (null != list && list.size() > 0) {
                     BallisticBlank blank = list.get(random.nextInt(list.size()));
                     int row = blank.getRow();
-                    BubbleTrack bubbleTrack=(BubbleTrack)bubbleLayout.getChildAt(row);
+                    BubbleTrack bubbleTrack = (BubbleTrack) bubbleLayout.getChildAt(row);
+                    int top = random.nextInt(Utils.dip2px(getBaseContext(), 30));
                     if (bubbleTrack.getChildCount() == 0) {
                         int left = random.nextInt(blank.getRight() - blank.getTargetTextwidth());
                         params.leftMargin = left;
+                        params.topMargin = top;
                         bubbleTrack.addView(mTextView, params);
-                    }else{
+                    } else {
                         if (blank.getIndex() > 0) {
                             View lastView = bubbleTrack.getChildAt(blank.getIndex() - 1);
                             FrameLayout.LayoutParams lastViewParams = (FrameLayout.LayoutParams) lastView.getLayoutParams();
                             int lastViewSize = lastViewParams.leftMargin + lastView.getMeasuredWidth();
                             int left = lastViewSize + random.nextInt(blank.getRight() - blank.getTargetTextwidth() - lastViewSize);
                             params.leftMargin = left;
+                            params.topMargin = top;
                             bubbleTrack.addView(mTextView, blank.getIndex(), params);
-                        }else{
+                        } else {
                             int left = random.nextInt(blank.getRight() - blank.getTargetTextwidth());
                             params.leftMargin = left;
+                            params.topMargin = top;
                             bubbleTrack.addView(mTextView, blank.getIndex(), params);
                         }
                     }
                 }
 
-                /*if (mContent.getChildCount() == 0) {
-                    params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    //List<BallisticBlank> list = findBlank(mTextView.getText().toString());
-                    print(list);
-                    if (null != list && list.size() > 0) {
-                        BallisticBlank blank = list.get(random.nextInt(list.size()));
-                        int left = random.nextInt(blank.getRight() - blank.getTargetTextwidth());
-                        params.leftMargin = left;
-                        mContent.addView(mTextView, params);
-                    }
-                } else {
-                    params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    //List<BallisticBlank> list = findBlank(mTextView.getText().toString());
-                    print(list);
-                    if (null != list && list.size() > 0) {
-                        int index = random.nextInt(list.size());
-                        BallisticBlank blank = list.get(index);
-                        if (blank.getIndex() > 0) {
-                            View lastView = mContent.getChildAt(blank.getIndex() - 1);
-                            FrameLayout.LayoutParams lastViewParams = (FrameLayout.LayoutParams) lastView.getLayoutParams();
-                            int lastViewSize = lastViewParams.leftMargin + lastView.getMeasuredWidth();
-                            int left = lastViewSize + random.nextInt(blank.getRight() - blank.getTargetTextwidth() - lastViewSize);
-                            params.leftMargin = left;
-                            mContent.addView(mTextView, blank.getIndex(), params);
-                        } else {
-                            int left = random.nextInt(blank.getRight() - blank.getTargetTextwidth());
-                            params.leftMargin = left;
-                            mContent.addView(mTextView, blank.getIndex(), params);
-                        }
-                    }
-                }*/
             }
         });
         findViewById(R.id.remove).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mContent.removeAllViews();
+                for (int i = 0; i < bubbleLayout.getChildCount(); i++) {
+                    BubbleTrack bubbleTrack = (BubbleTrack) bubbleLayout.getChildAt(i);
+                    bubbleTrack.removeAllViews();
+                }
             }
         });
     }
