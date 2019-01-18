@@ -1,4 +1,4 @@
-package com.yuntu.scdemo;
+package com.yuntu.randombubbleview;
 
 public class BulletBubble {
 

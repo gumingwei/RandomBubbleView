@@ -1,8 +1,4 @@
-package com.yuntu.scdemo;
-
-import android.util.Log;
-
-import java.util.Random;
+package com.yuntu.randombubbleview;
 
 public class BallisticBlank {
 
