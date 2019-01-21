@@ -1,6 +1,8 @@
 package com.yuntu.randombubbleview;
 
-public class BallisticBlank {
+import android.animation.ObjectAnimator;
+
+public class BallisticGap {
 
     private int row;
 
@@ -12,7 +14,7 @@ public class BallisticBlank {
 
     private int index;
 
-    public BallisticBlank(int row, int left, int right, int width, int index) {
+    public BallisticGap(int row, int left, int right, int width, int index) {
         this.row = row;
         this.left = left;
         this.right = right;
@@ -60,10 +62,6 @@ public class BallisticBlank {
         this.index = index;
     }
 
-    /*public int getLeftRange(Random random) {
-        Log.i("Gmw","")
-        return left + random.nextInt(right - width - left);
-    }*/
 
     @Override
     public String toString() {

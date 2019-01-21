@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.yuntu.randombubbleview.BubbleTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gray_bg"
-    android:paddingHorizontal="10dp"
-    android:paddingVertical="5dp"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp"
     android:text="#ffffff">
 
-</TextView>
+</com.yuntu.randombubbleview.BubbleTextView>
