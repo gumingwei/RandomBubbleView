@@ -1,7 +1,6 @@
 package com.yuntu.randombubbleview;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +18,8 @@ public class RandomBubbleLayout extends LinearLayout {
     private LayoutInflater layoutInflater;
 
     private float mTrackHeight;
+
+    private Adapter mAdapter;
 
     public RandomBubbleLayout(Context context) {
         this(context, null);
@@ -32,7 +32,6 @@ public class RandomBubbleLayout extends LinearLayout {
     public RandomBubbleLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOrientation(LinearLayout.VERTICAL);
-        layoutInflater = LayoutInflater.from(context);
         mTrackHeight = getResources().getDimension(R.dimen.bubbletrack_height);
     }
 
@@ -46,7 +45,14 @@ public class RandomBubbleLayout extends LinearLayout {
         }
     }
 
+    public void initInflater() {
+        if (layoutInflater == null) {
+            layoutInflater = LayoutInflater.from(getContext());
+        }
+    }
+
     private BubbleTrack inflater() {
+        initInflater();
         return (BubbleTrack) layoutInflater.inflate(R.layout.bubble_track, null);
     }
 
@@ -56,7 +62,7 @@ public class RandomBubbleLayout extends LinearLayout {
      * @param text
      * @return
      */
-    public List<BallisticGap> findBallisticGaps(String text) {
+    public synchronized List<BallisticGap> findBallisticGaps(String text) {
         List<BallisticGap> blankList = new ArrayList<>();
         int trackCount = getChildCount();
         for (int row = 0; row < trackCount; row++) {
@@ -114,10 +120,14 @@ public class RandomBubbleLayout extends LinearLayout {
      * @param list
      * @param text
      */
-    public void addItem(List<BallisticGap> list, String text) {
-        BubbleTextView bubbleTextView = (BubbleTextView) LayoutInflater.from(getContext()).inflate(R.layout.bubble_item, null);
-        bubbleTextView.setText(text);
-        bubbleTextView.setTextColor(Color.parseColor("#ffffff"));
+    public synchronized void addItem(String text, List<BallisticGap> list) {
+        View view = null;
+        if (mAdapter != null) {
+            view = mAdapter.getView(text);
+        }
+        if (view == null) {
+            return;
+        }
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         BallisticGap blank = list.get(random.nextInt(list.size()));
         int row = blank.getRow();
@@ -129,8 +139,10 @@ public class RandomBubbleLayout extends LinearLayout {
                 int left = random.nextInt(bound);
                 params.leftMargin = left;
                 params.topMargin = top;
-                bubbleTrack.addView(bubbleTextView, params);
-                bubbleTextView.showAnimator();
+                bubbleTrack.addView(view, params);
+                if (mAdapter != null) {
+                    mAdapter.showView(view);
+                }
             }
         } else {
             if (blank.getIndex() > 0) {
@@ -148,8 +160,10 @@ public class RandomBubbleLayout extends LinearLayout {
                     int left = lastViewSize + random.nextInt(bound);
                     params.leftMargin = left;
                     params.topMargin = top;
-                    bubbleTrack.addView(bubbleTextView, blank.getIndex(), params);
-                    bubbleTextView.showAnimator();
+                    bubbleTrack.addView(view, blank.getIndex(), params);
+                    if (mAdapter != null) {
+                        mAdapter.showView(view);
+                    }
                 }
             } else {
                 int bound = blank.getRight() - blank.getTargetTextwidth();
@@ -157,10 +171,16 @@ public class RandomBubbleLayout extends LinearLayout {
                     int left = random.nextInt(bound);
                     params.leftMargin = left;
                     params.topMargin = top;
-                    bubbleTrack.addView(bubbleTextView, blank.getIndex(), params);
-                    bubbleTextView.showAnimator();
+                    bubbleTrack.addView(view, blank.getIndex(), params);
+                    if (mAdapter != null) {
+                        mAdapter.showView(view);
+                    }
                 }
             }
         }
+    }
+
+    public void setAdapter(Adapter adapter) {
+        mAdapter = adapter;
     }
 }

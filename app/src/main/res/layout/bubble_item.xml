@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gray_bg"
-    android:paddingHorizontal="20dp"
-    android:paddingVertical="10dp"
+    android:paddingHorizontal="15dp"
+    android:paddingVertical="6dp"
     android:text="#ffffff">
 
 </com.yuntu.randombubbleview.BubbleTextView>

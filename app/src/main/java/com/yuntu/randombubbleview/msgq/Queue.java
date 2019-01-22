@@ -3,14 +3,14 @@ package com.yuntu.randombubbleview.msgq;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public abstract class MessageQ {
+public abstract class Queue {
 
-    public BlockingQueue queue = new LinkedBlockingDeque<String>();
+    public BlockingQueue queue = new LinkedBlockingDeque();
 
-    public MessageQ() {
+    public Queue() {
     }
 
-    public void put(String arg) {
+    public void put(Object arg) {
         try {
             queue.put(arg);
         } catch (InterruptedException e) {
@@ -18,17 +18,17 @@ public abstract class MessageQ {
         }
     }
 
-    public String take() {
+    public Object take() {
         try {
-            return (String) queue.take();
+            return queue.take();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public String peek() {
-        return (String) queue.peek();
+    public Object peek() {
+        return queue.peek();
     }
 
     public void clear() {

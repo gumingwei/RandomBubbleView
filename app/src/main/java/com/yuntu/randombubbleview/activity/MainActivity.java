@@ -1,13 +1,19 @@
 package com.yuntu.randombubbleview.activity;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.yuntu.randombubbleview.Adapter;
+import com.yuntu.randombubbleview.AnimatorUtils;
 import com.yuntu.randombubbleview.BallisticGap;
+import com.yuntu.randombubbleview.BubbleTextView;
 import com.yuntu.randombubbleview.BubbleTrack;
+import com.yuntu.randombubbleview.Callback;
 import com.yuntu.randombubbleview.R;
 import com.yuntu.randombubbleview.RandomBubbleLayout;
 import com.yuntu.randombubbleview.msgq.BubbleMessage;
@@ -21,7 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
     TextView mTaskCount;
 
+    TextView mViewpool;
+
     RandomBubbleLayout bubbleLayout;
+
+    LayoutInflater mInflate;
 
     Random random = new Random();
 
@@ -46,20 +56,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mInflate = LayoutInflater.from(getBaseContext());
         setContentView(R.layout.activity_main);
         mQueueCount = findViewById(R.id.queue);
         mTaskCount = findViewById(R.id.task);
+        mViewpool = findViewById(R.id.viewpool);
 
         bubbleLayout = findViewById(R.id.bubblelayout);
         bubbleLayout.createBubbleTrack(4);
+        bubbleLayout.setAdapter(new BubbleAdapter(getBaseContext()));
+
         findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*int textIndex = random.nextInt(text.length);
-                List<BallisticGap> list = bubbleLayout.findBallisticGaps(text[textIndex]);
-                if (null != list && list.size() > 0) {
-                    bubbleLayout.addItem(list, text[textIndex]);
-                }*/
                 String textIndex = text[random.nextInt(text.length)];
                 bubbleMessage.put(textIndex);
             }
@@ -71,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                     BubbleTrack bubbleTrack = (BubbleTrack) bubbleLayout.getChildAt(i);
                     bubbleTrack.removeAllViews();
                 }
-                bubbleMessage.removeListener();
             }
         });
         findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
@@ -83,23 +91,18 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public boolean isTake(String firstMsg) {
-                        Log.i("Gmw", "isTake=" + firstMsg);
-                        synchronized (bubbleLayout) {
-                            list = bubbleLayout.findBallisticGaps(firstMsg);
-                            if (null != list && list.size() > 0) {
-                                return true;
-                            }
-                            return false;
+
+                        list = bubbleLayout.findBallisticGaps(firstMsg);
+                        if (null != list && list.size() > 0) {
+                            return true;
                         }
+                        return false;
                     }
 
                     @Override
                     public void onTake(String arg) {
-                        synchronized (bubbleLayout) {
-                            Log.i("Gmw", "onTake=" + arg);
-                            if (null != list && list.size() > 0) {
-                                bubbleLayout.addItem(list, arg);
-                            }
+                        if (null != list && list.size() > 0) {
+                            bubbleLayout.addItem(arg, list);
                         }
                     }
                 });
@@ -131,13 +134,62 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void print(List<BallisticGap> list) {
-        if (null != list && list.size() > 0) {
-            for (int i = 0; i < list.size(); i++) {
-                Log.i("Gmw", "item_i=" + i + ",item=" + list.get(i).toString());
-            }
-        } else {
-            Log.i("Gmw", "list_null=");
+    @Override
+    protected void onPause() {
+        super.onPause();
+        bubbleMessage.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bubbleMessage.resume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bubbleMessage.stop();
+    }
+
+    public class BubbleAdapter extends Adapter {
+
+        public BubbleAdapter(Context context) {
+            super(context);
+        }
+
+        @Override
+        public View getView(String arg) {
+            BubbleTextView child = (BubbleTextView) super.getView(arg);
+            child.setText(arg);
+            child.setTextColor(Color.parseColor("#ffffff"));
+            return child;
+        }
+
+        @Override
+        public int createChildView() {
+            return R.layout.bubble_item;
+        }
+
+        @Override
+        public void showView(final View view) {
+            AnimatorUtils.showAnimator(view, new Callback() {
+                @Override
+                public void onAnimaEnd() {
+                    recyleView(view);
+                }
+            });
+        }
+
+        @Override
+        public void getViewPoolList(int size) {
+            super.getViewPoolList(size);
+            mViewpool.setText("View复用池实时个数:" + size);
         }
     }
 }

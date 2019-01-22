@@ -9,7 +9,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
         android:background="@drawable/bg"
         android:paddingHorizontal="10dp"
         android:paddingTop="20dp">
@@ -76,6 +76,12 @@
                 android:layout_height="wrap_content"
                 android:text="stop"
                 android:textAllCaps="false" />
+
+            <TextView
+                android:id="@+id/viewpool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <LinearLayout

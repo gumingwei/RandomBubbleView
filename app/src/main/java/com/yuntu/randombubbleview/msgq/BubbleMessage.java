@@ -6,11 +6,13 @@ import android.os.Message;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BubbleMessage extends MessageQ {
+public class BubbleMessage extends Queue {
 
     private boolean isTake = true;
 
-    private int TIME_INTERVAL = 2 * 1000;
+    private boolean isPause;
+
+    private int TIME_INTERVAL = 1 * 1000;
 
     private List<BubbleMsgListener> mListeners;
 
@@ -45,7 +47,6 @@ public class BubbleMessage extends MessageQ {
                             mListeners.get(msg.arg1).onTake((String) msg.obj);
                         }
                     }
-
                     if (mInfoListener != null) {
                         mInfoListener.onTaskCount(mListeners.size());
                     }
@@ -60,8 +61,12 @@ public class BubbleMessage extends MessageQ {
     };
 
     @Override
-    public void put(String arg) {
+    public void put(Object arg) {
         super.put(arg);
+        sendQueueSize();
+    }
+
+    private void sendQueueSize() {
         if (mInfoListener != null) {
             Message countMessage = new Message();
             countMessage.what = 0x02;
@@ -73,20 +78,17 @@ public class BubbleMessage extends MessageQ {
     private void take(BubbleMsgListener listener, int index) {
         while (isTake) {
             try {
-                if (peek() != null) {
-                    if (listener.isTake(peek())) {
-                        //取消息
-                        Message message = new Message();
-                        message.what = 0x01;
-                        message.obj = take();
-                        message.arg1 = index;
-                        handler.sendMessage(message);
-                        //消息队列size
-                        if (mInfoListener != null) {
-                            Message countMessage = new Message();
-                            countMessage.what = 0x02;
-                            countMessage.arg1 = queue.size();
-                            handler.sendMessage(countMessage);
+                if (!isPause) {
+                    if (peek() != null) {
+                        if (listener.isTake((String) peek())) {
+                            //取消息
+                            Message message = new Message();
+                            message.what = 0x01;
+                            message.obj = take();
+                            message.arg1 = index;
+                            handler.sendMessage(message);
+                            //消息队列size
+                            sendQueueSize();
                         }
                     }
                 }
@@ -121,8 +123,17 @@ public class BubbleMessage extends MessageQ {
         mListeners.clear();
     }
 
+    public void pause() {
+        isPause = true;
+    }
+
+    public void resume() {
+        isPause = false;
+    }
+
     @Override
     public void stop() {
         isTake = false;
+        removeListener();
     }
 }

@@ -1,7 +1,5 @@
 package com.yuntu.randombubbleview;
 
-import android.animation.ObjectAnimator;
-
 public class BallisticGap {
 
     private int row;
