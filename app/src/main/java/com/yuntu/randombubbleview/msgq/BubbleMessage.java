@@ -12,7 +12,7 @@ public class BubbleMessage extends Queue {
 
     private boolean isPause;
 
-    private int TIME_INTERVAL = 1 * 1000;
+    private int TIME_INTERVAL = 500;
 
     private List<BubbleMsgListener> mListeners;
 

@@ -8,6 +8,9 @@ import android.view.View;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 气泡布局适配器，
+ */
 public abstract class Adapter {
 
     private List<View> viewPoolList;
