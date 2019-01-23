@@ -8,15 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.yuntu.randombubbleview.Adapter;
-import com.yuntu.randombubbleview.AnimatorUtils;
-import com.yuntu.randombubbleview.BallisticGap;
-import com.yuntu.randombubbleview.BubbleTextView;
-import com.yuntu.randombubbleview.BubbleTrack;
-import com.yuntu.randombubbleview.Callback;
+import com.yuntu.bubbleview.Adapter;
+import com.yuntu.bubbleview.AnimatorUtils;
+import com.yuntu.bubbleview.BallisticGap;
+import com.yuntu.bubbleview.BubbleTextView;
+import com.yuntu.bubbleview.BubbleTrack;
+import com.yuntu.bubbleview.Callback;
+import com.yuntu.bubbleview.RandomBubbleLayout;
+import com.yuntu.bubbleview.msgq.BubbleMessage;
 import com.yuntu.randombubbleview.R;
-import com.yuntu.randombubbleview.RandomBubbleLayout;
-import com.yuntu.randombubbleview.msgq.BubbleMessage;
 
 import java.util.List;
 import java.util.Random;
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public boolean isTake(String firstMsg) {
-
                         list = bubbleLayout.findBallisticGaps(firstMsg);
                         if (null != list && list.size() > 0) {
                             return true;

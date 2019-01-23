@@ -1,4 +1,4 @@
-package com.yuntu.randombubbleview.msgq;
+package com.yuntu.bubbleview.msgq;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;

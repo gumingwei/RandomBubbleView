@@ -1,4 +1,4 @@
-package com.yuntu.randombubbleview;
+package com.yuntu.bubbleview;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -27,6 +27,7 @@ public class RandomBubbleLayout extends LinearLayout {
 
     public RandomBubbleLayout(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     public RandomBubbleLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -40,7 +41,7 @@ public class RandomBubbleLayout extends LinearLayout {
             removeAllViews();
         }
         for (int i = 0; i < count; i++) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int) mTrackHeight);
+            LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, (int) mTrackHeight);
             addView(inflater(), params);
         }
     }

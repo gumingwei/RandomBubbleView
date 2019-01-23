@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <dimen name="bubbletrack_height">50.00dp</dimen>
 </resources>

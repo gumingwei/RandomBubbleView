@@ -1,4 +1,4 @@
-package com.yuntu.randombubbleview;
+package com.yuntu.bubbleview;
 
 public interface Callback {
 

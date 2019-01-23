@@ -1,4 +1,4 @@
-package com.yuntu.randombubbleview;
+package com.yuntu.bubbleview;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

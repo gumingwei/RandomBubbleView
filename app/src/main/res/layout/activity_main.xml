@@ -10,14 +10,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:background="@drawable/bg"
+        android:background="@drawable/bubble_bg"
         android:paddingHorizontal="10dp"
         android:paddingTop="20dp">
 
-        <com.yuntu.randombubbleview.RandomBubbleLayout
+        <com.yuntu.bubbleview.RandomBubbleLayout
             android:id="@+id/bubblelayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </FrameLayout>
 
     <LinearLayout

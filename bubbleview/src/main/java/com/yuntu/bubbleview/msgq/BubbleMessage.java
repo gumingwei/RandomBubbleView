@@ -1,4 +1,4 @@
-package com.yuntu.randombubbleview.msgq;
+package com.yuntu.bubbleview.msgq;
 
 import android.os.Handler;
 import android.os.Message;

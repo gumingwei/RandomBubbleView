@@ -1,4 +1,4 @@
-package com.yuntu.randombubbleview.msgq;
+package com.yuntu.bubbleview.msgq;
 
 public interface QListener {
     void onTake(String arg);
